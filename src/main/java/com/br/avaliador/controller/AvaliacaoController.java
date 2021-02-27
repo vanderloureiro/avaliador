@@ -37,7 +37,7 @@ public class AvaliacaoController {
         return ResponseEntity.ok().body(this.service.buscar());
     }
 
-    @GetMapping("/{uuid}")
+    @GetMapping("/{id}")
     public ResponseEntity<AvaliacaoDto> buscarPorUuid(@PathVariable Long id) {
 
         try {
