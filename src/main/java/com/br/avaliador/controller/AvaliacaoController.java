@@ -8,6 +8,7 @@ import com.br.avaliador.domain.form.AvaliacaoForm;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,13 +35,11 @@ public class AvaliacaoController {
 
     @GetMapping
     public ResponseEntity<List<AvaliacaoDto>> buscar() {
-
         return ResponseEntity.ok().body(this.service.buscar());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AvaliacaoDto> buscarPorId(@PathVariable Long id) {
-
         try {
             return ResponseEntity.ok().body(this.service.buscarPorId(id));
         } catch (Exception e) {
@@ -57,9 +56,8 @@ public class AvaliacaoController {
         }
     }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-
         this.service.remover(id);
         return ResponseEntity.ok().build();
     }
