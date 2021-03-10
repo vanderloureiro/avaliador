@@ -43,5 +43,16 @@ public class AvaliacaoService {
         return this.repository.findById(id).orElseThrow(
             () -> new NotFoundException("Avaliacao não encontrada"));
     }
+
+    public AvaliacaoDto alterar(AvaliacaoForm form, Long id) throws NotFoundException {
+        Avaliacao entidade = this.buscarEntidadePorId(id);
+        entidade.setComentario(form.getComentario());
+        entidade.setNota(form.getNota());
+        return this.mapper.toDto(this.repository.save(entidade));
+    }
+
+    public void remover(Long id) {
+        this.repository.deleteById(id);
+    }
     
 }

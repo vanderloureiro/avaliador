@@ -24,7 +24,7 @@ public class AvaliacaoTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void criarNovoUsuarioTest() {
+    public void criarNovaAvaliacaoTest() {
 
         AvaliacaoForm form = new AvaliacaoForm();
         form.setNota(5);
@@ -36,6 +36,38 @@ public class AvaliacaoTest {
             .exchange("/avaliacao", HttpMethod.POST, httpEntity, AvaliacaoDto.class);
     
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody().getNota(), form.getNota());
+        assertEquals(response.getBody().getNota(), 5);
+    }
+
+    @Test
+    public void buscaUmaAvaliacaoTest() {
+
+        AvaliacaoForm form = new AvaliacaoForm();
+        form.setNota(5);
+        form.setComentario("Mediano");
+
+        HttpEntity<AvaliacaoForm> httpEntity = new HttpEntity<>(form);
+
+        ResponseEntity<AvaliacaoDto> response = this.testRestTemplate
+            .exchange("/avaliacao", HttpMethod.POST, httpEntity, AvaliacaoDto.class);
+    
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody().getNota(), 5);
+    }
+
+    @Test
+    public void alteraUmaAvaliacaoTest() {
+
+        AvaliacaoForm form = new AvaliacaoForm();
+        form.setNota(5);
+        form.setComentario("Mediano");
+
+        HttpEntity<AvaliacaoForm> httpEntity = new HttpEntity<>(form);
+
+        ResponseEntity<AvaliacaoDto> response = this.testRestTemplate
+            .exchange("/avaliacao", HttpMethod.POST, httpEntity, AvaliacaoDto.class);
+    
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody().getNota(), 5);
     }
 }

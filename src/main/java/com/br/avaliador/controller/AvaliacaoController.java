@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,12 +39,28 @@ public class AvaliacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AvaliacaoDto> buscarPorUuid(@PathVariable Long id) {
+    public ResponseEntity<AvaliacaoDto> buscarPorId(@PathVariable Long id) {
 
         try {
             return ResponseEntity.ok().body(this.service.buscarPorId(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AvaliacaoDto> alterar(@RequestBody AvaliacaoForm form, @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(this.service.alterar(form, id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> remover(@PathVariable Long id) {
+
+        this.service.remover(id);
+        return ResponseEntity.ok().build();
     }
 }
