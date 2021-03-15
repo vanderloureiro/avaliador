@@ -1,13 +1,14 @@
 package com.br.avaliador.domain;
 
-import java.util.List;
-
 import com.br.avaliador.domain.dto.AvaliacaoDto;
 import com.br.avaliador.domain.entity.Avaliacao;
 import com.br.avaliador.domain.form.AvaliacaoForm;
 import com.br.avaliador.domain.mapper.AvaliacaoMapper;
 import com.br.avaliador.repository.AvaliacaoRepository;
+import com.br.avaliador.repository.criteria.filtro.AvaliacaoFiltro;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -30,8 +31,14 @@ public class AvaliacaoService {
         return this.mapper.toDto(entidadeSalva);
     }
 
-    public List<AvaliacaoDto> buscar() {
-        return this.mapper.toDto(this.repository.findAll());
+
+    public Page<AvaliacaoDto> buscar(AvaliacaoFiltro params, Pageable paginacao) {
+
+        Page<Avaliacao> avaliacoes = this.repository.buscarComFiltro(params, paginacao);
+
+        return avaliacoes.map(avaliacao -> {
+            return this.mapper.toDto(avaliacao);
+        });
     }
 
     public AvaliacaoDto buscarPorId(Long id) throws NotFoundException {
