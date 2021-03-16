@@ -5,13 +5,8 @@ import java.util.List;
 import com.br.avaliador.domain.AvaliacaoService;
 import com.br.avaliador.domain.dto.AvaliacaoDto;
 import com.br.avaliador.domain.form.AvaliacaoForm;
-import com.br.avaliador.repository.criteria.filtro.AvaliacaoFiltro;
+import com.br.avaliador.exception.NotFoundException;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,37 +31,29 @@ public class AvaliacaoController {
 
     @PostMapping
     public ResponseEntity<AvaliacaoDto> cadastrar(@RequestBody AvaliacaoForm form) {
-        return ResponseEntity.ok().body(this.service.cadastrar(form));
+
+        try {
+            return ResponseEntity.ok().body(this.service.cadastrar(form));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
-    /*
-    isso é para caso use o swagger, serve para ocultar os campos normais do Pageable e 
-    exibir os campos com nomes que você quer, no caso, page, size e sorte.
-    adicionar tbm @ApiIgnore antes de (... Pageable pageable)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Results page you want to retrieve (0..N)"),
-            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "Number of records per page."),
-            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "Sorting criteria in the format: property(,asc|desc). "
-                    + "Default sort order is ascending. " + "Multiple sort criteria are supported.") })
-     */
-    public ResponseEntity<List<AvaliacaoDto>> buscarTodas(AvaliacaoFiltro params,
-            @PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
+    public ResponseEntity<List<AvaliacaoDto>> buscar() {
 
-        Page<AvaliacaoDto> resultado = this.service.buscar(params, pageable);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("total-elementos", Long.toString(resultado.getTotalElements()));
-        headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "total-elementos");
-
-        return ResponseEntity.ok().headers(headers).body(resultado.getContent());
+        try {
+            return ResponseEntity.ok().body(this.service.buscar());
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AvaliacaoDto> buscarPorId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(this.service.buscarPorId(id));
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -75,14 +62,18 @@ public class AvaliacaoController {
     public ResponseEntity<AvaliacaoDto> alterar(@RequestBody AvaliacaoForm form, @PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(this.service.alterar(form, id));
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        this.service.remover(id);
-        return ResponseEntity.ok().build();
+        try {
+            this.service.remover(id);
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
