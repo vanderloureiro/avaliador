@@ -5,7 +5,6 @@ import java.util.List;
 import com.br.avaliador.domain.AvaliacaoService;
 import com.br.avaliador.domain.dto.AvaliacaoDto;
 import com.br.avaliador.domain.form.AvaliacaoForm;
-import com.br.avaliador.exception.NotFoundException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,48 +31,31 @@ public class AvaliacaoController {
     @PostMapping
     public ResponseEntity<AvaliacaoDto> cadastrar(@RequestBody AvaliacaoForm form) {
 
-        try {
-            return ResponseEntity.ok().body(this.service.cadastrar(form));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(this.service.cadastrar(form));
     }
 
     @GetMapping
     public ResponseEntity<List<AvaliacaoDto>> buscar() {
 
-        try {
-            return ResponseEntity.ok().body(this.service.buscar());
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(this.service.buscar());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AvaliacaoDto> buscarPorId(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(this.service.buscarPorId(id));
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+        return ResponseEntity.ok().body(this.service.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AvaliacaoDto> alterar(@RequestBody AvaliacaoForm form, @PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(this.service.alterar(form, id));
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        
+        return ResponseEntity.ok().body(this.service.alterar(form, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        try {
-            this.service.remover(id);
-            return ResponseEntity.ok().build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+        this.service.remover(id);
+        return ResponseEntity.ok().build();
     }
 }
