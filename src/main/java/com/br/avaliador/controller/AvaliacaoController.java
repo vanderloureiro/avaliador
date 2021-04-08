@@ -40,7 +40,7 @@ public class AvaliacaoController {
         return ResponseEntity.ok().body(this.service.buscar());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = { "application/json;**charset=UTF-8**" })
     public ResponseEntity<AvaliacaoDto> buscarPorId(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(this.service.buscarPorId(id));
