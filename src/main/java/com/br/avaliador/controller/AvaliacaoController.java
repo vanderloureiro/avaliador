@@ -53,7 +53,7 @@ public class AvaliacaoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
 
         this.service.remover(id);
         return ResponseEntity.ok().build();

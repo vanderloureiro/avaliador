@@ -44,8 +44,9 @@ public class AvaliacaoService {
 
     public List<AvaliacaoDto> buscar() {
         List<Avaliacao> resultado = this.repository.findAll();
-        if (resultado.size() == 0) 
-            return null;
+        if (resultado.isEmpty()) {
+            throw new NotFoundException("Sem registros!");
+        }
         return this.mapper.toDto(resultado);
     } 
 
